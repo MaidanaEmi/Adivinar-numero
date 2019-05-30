@@ -17,8 +17,8 @@ class Juego:
     
     def iniciar_adivinar_numero(self):
         correcto_ingresado = False
-        #random_generado = self.generarRandom()
-        self.obj_random = [1,2,3,4]#Numero(random_generado)
+        random_generado = self.generarRandom()
+        self.obj_random = Numero(random_generado)
 
         while correcto_ingresado == False:
             numero_ingresado = input('Ingresa un número de 4 cifras que no se repitan: ')
@@ -29,7 +29,7 @@ class Juego:
             else: 
                 ingresado_lista = [int(digit) for digit in numero_ingresado]
                 self.obj_ingresado = Numero(ingresado_lista)
-                resultado = self.calcularCoincidencias(self.obj_ingresado.numero,self.obj_random)
+                resultado = self.calcularCoincidencias(self.obj_ingresado.numero,self.obj_random.numero)
                 if self.coinciden == True:
                     numero_int = self.convertirNumero(ingresado_lista)
                     print("¡Adivinaste!. El número es: ", numero_int)
@@ -39,6 +39,7 @@ class Juego:
                     print("Cantidad de cifras correctas: ", resultado[0])
                     print("Cantidad de cifras regulares: ", resultado[1])
                     print("¡Intenta con otro número!")
+    
     
     def Rand(self):
         num = 4
@@ -135,3 +136,6 @@ opcion = int(input("Opción: "))
 if opcion == 1:
     obj_juego = Juego()
     obj_juego.iniciar_adivinar_numero()
+if opcion == 2:
+    obj_juego = Juego()
+    #obj_juego.iniciar_pensar_numero()
