@@ -1,18 +1,14 @@
 #Importación de dependencias
-import numpy as np
 import random
 
 #Clase Numero
 class Numero:
 
     def __init__(self, numero):
-        #self.numero = np.array(numero)
         self.numero = numero    
     
 #Clase Juego
 class Juego:
-    #obj_numero = Numero()
-    #obj_random = Numero()
 
     def __init__(self):
         self.cantCifras = 4
@@ -21,8 +17,8 @@ class Juego:
     
     def iniciar_adivinar_numero(self):
         correcto_ingresado = False
-        random_generado = self.generarRandom()
-        self.obj_random = Numero(random_generado)
+        #random_generado = self.generarRandom()
+        self.obj_random = [1,2,3,4]#Numero(random_generado)
 
         while correcto_ingresado == False:
             numero_ingresado = input('Ingresa un número de 4 cifras que no se repitan: ')
@@ -33,9 +29,10 @@ class Juego:
             else: 
                 ingresado_lista = [int(digit) for digit in numero_ingresado]
                 self.obj_ingresado = Numero(ingresado_lista)
-                resultado = self.calcularCoincidencias(self.obj_ingresado.numero,self.obj_random.numero)
+                resultado = self.calcularCoincidencias(self.obj_ingresado.numero,self.obj_random)
                 if self.coinciden == True:
-                    print("¡Adivinaste!. Ese es el número")
+                    numero_int = self.convertirNumero(ingresado_lista)
+                    print("¡Adivinaste!. El número es: ", numero_int)
                     correcto_ingresado = True
                     break
                 else:
@@ -56,7 +53,7 @@ class Juego:
     def generarRandom(self):
         valido = False        
         while valido == False:
-            random_lista = self.Rand() #Creamos el aleatorio como una lista
+            random_lista = self.Rand() #Se crea el aleatorio como una lista
             validacion = obj_validacion.validacionCifrasRepetidas(random_lista)
             if validacion == False:
                 valido = True            
@@ -78,6 +75,11 @@ class Juego:
                             regulares +=1
 
         return (correctas,regulares)
+    
+    def convertirNumero(self,numero_lista):
+        numero_str = [str(i) for i in numero_lista]
+        numero_int = int("".join(numero_str))
+        return numero_int
 
 # Clase Validacion
 class Validacion:
