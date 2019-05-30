@@ -1,5 +1,6 @@
 #Importación de dependencias
 import random
+import unittest
 
 #Clase Numero
 class Numero:
@@ -17,8 +18,8 @@ class Juego:
     
     def iniciar_adivinar_numero(self):
         correcto_ingresado = False
-        #random_generado = self.generarRandom()
-        self.obj_random = [1,2,3,4]#Numero(random_generado)
+        random_generado = self.generarRandom() #[1,2,3,4]
+        self.obj_random = Numero(random_generado)
 
         while correcto_ingresado == False:
             numero_ingresado = input('Ingresa un número de 4 cifras que no se repitan: ')
@@ -29,7 +30,7 @@ class Juego:
             else: 
                 ingresado_lista = [int(digit) for digit in numero_ingresado]
                 self.obj_ingresado = Numero(ingresado_lista)
-                resultado = self.calcularCoincidencias(self.obj_ingresado.numero,self.obj_random)
+                resultado = self.calcularCoincidencias(self.obj_ingresado.numero,self.obj_random.numero)
                 if self.coinciden == True:
                     numero_int = self.convertirNumero(ingresado_lista)
                     print("¡Adivinaste!. El número es: ", numero_int)
@@ -126,6 +127,7 @@ class Validacion:
             return True
         else:
             return False
+
 #Bloque principal
 obj_validacion = Validacion()
 print("Ingresa 1 si quieres ser el adivinador ")
@@ -135,3 +137,32 @@ opcion = int(input("Opción: "))
 if opcion == 1:
     obj_juego = Juego()
     obj_juego.iniciar_adivinar_numero()
+
+# UnitTest
+
+class PruebaJuego(unittest.TestCase):
+    def test_calcularCoincidencias(self):
+        self.assertEqual(obj_juego.calcularCoincidencias([1,2,3,4],[1,9,6,8]),(1,0))
+        self.assertEqual(obj_juego.calcularCoincidencias([1,2,3,4],[4,3,2,1]),(0,4))
+        self.assertEqual(obj_juego.calcularCoincidencias([1,2,3,4],[5,6,7,8]),(0,0))
+        self.assertEqual(obj_juego.calcularCoincidencias([1,2,3,4],[4,2,3,1]),(2,2))
+    
+    def test_convertirNumero(self):
+        self.assertEqual(obj_juego.convertirNumero([1,2,3,4]),1234)
+    
+class PruebaValidacion(unittest.TestCase):
+    def test_validarNumero(self):
+        self.assertEqual(obj_validacion.validarNumero([9,9,1,4]),False)
+        self.assertEqual(obj_validacion.validarNumero([1,2,3,4]),True)
+    
+    def test_validarEntero(self):
+        self.assertEqual(obj_validacion.validacionEntero(['a','d','f','r']),False)
+
+    def test_validarCantCifras(self):
+        self.assertEqual(obj_validacion.validarNumero([1,2,3]),False)
+
+    def test_validarCifrasRepetidas(self):
+        self.assertEqual(obj_validacion.validacionCifrasRepetidas([1,2,3,1]),True)
+
+if __name__ == "__main__":
+    unittest.main()
