@@ -69,21 +69,13 @@ class Juego:
             self.coinciden = True
         else:
             self.coinciden = False
-            array1 = np.array(n1, dtype= 'int')
-            array2 = np.array(n2, dtype= 'int')
-            r = (array1==array2)
-            for i in r:
-                if i == True:
-                    correctas = correctas + 1
-            
-            for i in n1:           
-                if n2.count(i)==1:
-                    regulares = regulares+1
-                    i = 0
-                    while (i < 4):     
-                        if n1[i]==n2[i]:
-                            regulares = regulares -1
-                        i = i + 1
+            for i in n1:
+                for j in n2:
+                    if i == j:
+                        if n1.index(i)== n2.index(j):
+                            correctas += 1
+                        else:
+                            regulares +=1
 
         return (correctas,regulares)
 
