@@ -14,6 +14,7 @@ class Juego:
         self.cantCifras = 4
         self.error = ""
         self.coinciden = False
+        self.respuestas = []
     
     def iniciar_adivinar_numero(self):
         correcto_ingresado = False
@@ -40,6 +41,27 @@ class Juego:
                     print("Cantidad de cifras regulares: ", resultado[1])
                     print("¡Intenta con otro número!")
     
+    def iniciar_pensar_numero(self):
+        print("Juego 2 iniciado!")
+        random_generado = self.generarRandom()
+        ingresado_dic = {'numero': random_generado, 'correctas': 0, 'regulares': 0}
+        self.obj_random = Numero(random_generado)
+        correcto = False
+        while correcto == False:
+            print("¿El número que pensaste es? ", self.obj_random.numero )
+            adivina = input("¿Es el número?. s/n: ")
+            if adivina == "s":
+                    correcto = True
+                    print("¡Juego terminado!")
+            else:
+                ingresado_dic = {'numero': self.obj_random.numero, 'correctas': 0, 'regulares': 0}   
+                # Agregar validaciones de las respuestas ingresadas!
+                correc=int(input("Ingrese la cantidad de cifras correctas: "))
+                reg=int(input("Ingrese la cantidad de cifras regulares: "))
+                ingresado_dic['correctas'] = correc
+                ingresado_dic['regulares'] = reg
+                self.respuestas.append(ingresado_dic)
+                self.obj_random.numero = self.adivinarNumero(ingresado_dic)    
     
     def Rand(self):
         num = 4
@@ -59,6 +81,32 @@ class Juego:
             if validacion == False:
                 valido = True            
         return random_lista
+
+    # def validarAleatorio(self, numero):
+    #     numero_int = self.convertirNumero(numero)
+    #     #numero_str = ""
+    #     #Validacion si no es 9999
+    #     numero_limite = str(numero_int)
+    #     if numero_limite == "9999":
+    #         numero_str = "0123"
+    #     else:
+    #         valido = False
+    #         while valido == False:
+    #             numero_int += 1
+    #             numero_str = str(numero_int)
+    #             if len(numero_str) == 3:
+    #                   numero_str ='0'+ numero_str
+    #             if numero_str == '9999': 
+    #                   numero_int = 123
+    #                   numero_str = "0123"
+    #             v = obj_validacion.validacionCifrasRepetidas(numero_str)
+    #             if v == False:
+    #                   valido = True
+        
+    #     numero_lista=[int(digit) for digit in numero_str]
+    #     return numero_lista
+                 
+        
 
     def calcularCoincidencias(self,n1,n2):
         correctas = 0
@@ -81,6 +129,37 @@ class Juego:
         numero_str = [str(i) for i in numero_lista]
         numero_int = int("".join(numero_str))
         return numero_int
+    
+    def adivinarNumero(self, dic):
+        #self.respuestas.append(dic)
+        numero_int = self.convertirNumero(dic['numero'])
+        coincide = False
+        while coincide == False:
+            ####
+            valid = False
+            while valid == False:
+                numero_int += 1
+                numero_str = str(numero_int)
+                if len(numero_str) == 3:
+                      numero_str ='0'+ numero_str
+                if numero_str == '9999': 
+                      numero_int = 123
+                      numero_str = "0123"
+                v = obj_validacion.validacionCifrasRepetidas(numero_str)
+                if v == False:
+                      valid = True
+            ####
+            
+            count = 0
+            for d in self.respuestas:
+                random_valido =[int(digit) for digit in numero_str]
+                res = self.calcularCoincidencias(d['numero'],random_valido)
+                if res[0] == d['correctas'] and res[1] == d['regulares']:
+                    count +=1
+                if count == len(self.respuestas):
+                    coincide = True
+                    return random_valido
+        return numero_str
 
 # Clase Validacion
 class Validacion:
@@ -124,7 +203,7 @@ class Validacion:
             if numero.count(cifra)>1:
                 contador +=1                
         if contador > 1:
-            return True
+            return True #return (True,contador)
         else:
             return False
 #Bloque principal
@@ -138,4 +217,4 @@ if opcion == 1:
     obj_juego.iniciar_adivinar_numero()
 if opcion == 2:
     obj_juego = Juego()
-    #obj_juego.iniciar_pensar_numero()
+    obj_juego.iniciar_pensar_numero()
