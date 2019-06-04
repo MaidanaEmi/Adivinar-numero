@@ -53,15 +53,22 @@ class Juego:
             if adivina == "s":
                     correcto = True
                     print("¡Juego terminado!")
-            else:
+            else:  
                 ingresado_dic = {'numero': self.obj_random.numero, 'correctas': 0, 'regulares': 0}   
-                # Agregar validaciones de las respuestas ingresadas!
-                correc=int(input("Ingrese la cantidad de cifras correctas: "))
-                reg=int(input("Ingrese la cantidad de cifras regulares: "))
-                ingresado_dic['correctas'] = correc
-                ingresado_dic['regulares'] = reg
-                self.respuestas.append(ingresado_dic)
-                self.obj_random.numero = self.adivinarNumero(ingresado_dic)    
+                rtasInput = False
+                while rtasInput == False:
+                    correc=int(input("Ingrese la cantidad de cifras correctas: "))
+                    reg=int(input("Ingrese la cantidad de cifras regulares: "))
+                    if correc<5 and reg<5 and (correc+reg)<=4:
+                        ingresado_dic['correctas'] = correc
+                        ingresado_dic['regulares'] = reg
+                        self.respuestas.append(ingresado_dic)
+                        self.obj_random.numero = self.adivinarNumero(ingresado_dic)
+                        rtasInput = True
+                    else:
+                        print("¡Valores ingresados incorrectos!")
+
+
     
     def Rand(self):
         num = 4
@@ -85,7 +92,7 @@ class Juego:
     # def validarAleatorio(self, numero):
     #     numero_int = self.convertirNumero(numero)
     #     #numero_str = ""
-    #     #Validacion si no es 9999
+        #Validacion si no es 9999
     #     numero_limite = str(numero_int)
     #     if numero_limite == "9999":
     #         numero_str = "0123"
@@ -131,7 +138,6 @@ class Juego:
         return numero_int
     
     def adivinarNumero(self, dic):
-        #self.respuestas.append(dic)
         numero_int = self.convertirNumero(dic['numero'])
         coincide = False
         while coincide == False:
